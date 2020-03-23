@@ -1,0 +1,26 @@
+/* .list-group-item {
+  cursor: pointer;
+} */
+.btn-random {
+  margin-left: 19px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.fa {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.star {
+  color: darkorange;
+}
+.name {
+  display: block;
+}
+.name span {
+  float: right;
+}
+.trash {
+  color: crimson;
+}

@@ -1,0 +1,18 @@
+a {
+  text-decoration: none;
+}
+.navbar-menu {
+  background-color: gainsboro;
+  height: 50px;
+  border-radius: 5px;
+  list-style: none;
+  display: flex;
+  text-align: center;
+}
+.nav-item {
+  font-size: 20px;
+  margin-top: 10px;
+}
+.add {
+  margin-left: 30px;
+}
