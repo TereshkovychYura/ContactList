@@ -1,5 +1,6 @@
 import React from "react";
 import "./AddContact.css";
+import { Redirect } from "react-router-dom";
 
 class AddContact extends React.Component {
   state = {
@@ -9,7 +10,8 @@ class AddContact extends React.Component {
     avatar: null,
     email: null,
     gender: null,
-    isFavorite: null
+    isFavorite: null,
+    isRedirect: false
   };
 
   getName = event => {
@@ -82,9 +84,15 @@ class AddContact extends React.Component {
       gender,
       isFavorite
     );
+    this.setState({
+      isRedirect: true
+    });
   };
 
   render() {
+    if (this.state.isRedirect) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
         {/*  {this.state.name}

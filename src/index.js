@@ -12,50 +12,33 @@ import NotFound from "./Components/NotFound/NotFound";
 import EditContact from "./Components/EditContact/EditContact";
 
 class App extends React.Component {
+  URL = "https://event-7c503.firebaseio.com/list.json";
+
   state = {
-    List: [
-      {
-        id: uuid(),
-        name: "Scott Stevens",
-        adress: "5842 Hillcrest Rd",
-        phone: "(870) 288-4149",
-        email: "scott.stevens@example.com",
-        gender: "men",
-        avatar: 47,
-        isFavorite: false
-      },
-      {
-        id: uuid(),
-        name: "Bob Marley",
-        adress: "3222 Brighton Br",
-        phone: "(068) 672-6732",
-        email: "bob.marley@example.com",
-        gender: "men",
-        avatar: 5,
-        isFavorite: true
-      },
-      {
-        id: uuid(),
-        name: "Linus Torvalds",
-        adress: "5842 Vidinska Str",
-        phone: "(098) 675-2345",
-        email: "linus.torvalds@example.com",
-        gender: "men",
-        avatar: 32,
-        isFavorite: false
-      },
-      {
-        id: uuid(),
-        name: "Marie Curie",
-        adress: "5842 Psheprasha Vul",
-        phone: "(098) 675-2345",
-        email: "maria.radium@example.com",
-        gender: "women",
-        avatar: 32,
-        isFavorite: false
-      }
-    ]
+    List: [],
+    currentContact: "",
+    findContact: "",
+    currency: ""
   };
+
+  updateContactList = () => {
+    fetch(this.URL, {
+      method: "GET"
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        this.setState({
+          List: data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
+  componentDidMount() {
+    this.updateContactList();
+  }
 
   onFavoriteChange = id => {
     const index = this.state.List.findIndex(elem => elem.id === id);
@@ -68,14 +51,32 @@ class App extends React.Component {
     });
   };
 
+  async saveNewContact(newList) {
+    await fetch(this.URL, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newList)
+    })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(res) {
+        console.log(res);
+      });
+    this.updateContactList();
+  }
+
   onAddContact = (name, address, phone, avatar, email, gender, isFavorite) => {
-    console.log(
+    /*  console.log(
       `Name: ${name}\nAdderss: ${address}\nPhone: ${phone}\nAvatar: ${avatar}\nEmail: ${email}\nGender: ${gender}\nIsFavorite: ${isFavorite}`
-    );
+    ); */
     const newContact = {
       id: uuid(),
       name: name,
-      adress: address,
+      address: address,
       phone: phone,
       email: email,
       gender: gender,
@@ -83,23 +84,45 @@ class App extends React.Component {
       isFavorite: isFavorite
     };
     const newList = [...this.state.List, newContact];
+    this.saveNewContact(newList);
+  };
+
+  onEditContact = id => {
+    const index = this.state.List.findIndex(elem => elem.id === id);
+    const currentContact = this.state.List[index];
     this.setState({
-      List: newList
+      currentContact: currentContact
     });
   };
 
-  onEditContact = (id, name, address, phone, avatar, email) => {
-    const index = this.state.List.findIndex(elem => elem.id === id);
-    const newContact = {
-      id: uuid(),
+  onEditCurrentContact = (
+    id,
+    name,
+    address,
+    phone,
+    avatar,
+    email,
+    gender,
+    isFavorite
+  ) => {
+    const editedContact = {
+      id: id,
       name: name,
-      adress: address,
+      address: address,
       phone: phone,
       email: email,
-      gender: "men",
+      gender: gender,
       avatar: avatar,
-      isFavorite: false
+      isFavorite: isFavorite
     };
+    const index = this.state.List.findIndex(elem => elem.id === id);
+    const partOne = this.state.List.slice(0, index);
+    const partTwo = this.state.List.slice(index + 1);
+    const newList = [...partOne, editedContact, ...partTwo];
+    this.setState({
+      List: newList
+    });
+    this.saveNewContact(newList);
   };
 
   onDeleteContact = id => {
@@ -107,26 +130,48 @@ class App extends React.Component {
     const partOne = this.state.List.slice(0, index);
     const partTwo = this.state.List.slice(index + 1);
     const newList = [...partOne, ...partTwo];
+    this.saveNewContact(newList);
+  };
+
+  onSearch = contactName => {
+    /*    console.log("Contact Name =>", contactName); */
     this.setState({
-      List: newList
+      findContact: contactName
+    });
+  };
+
+  onShowContact = (items, searchValue) => {
+    // console.log("Start items => ", items, "\nSearchValue => ", searchValue);
+    if (searchValue.length === 0) {
+      return items;
+    }
+    return items.filter(item => {
+      // console.log("item => ", item.name);
+
+      return item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
     });
   };
 
   render() {
+    const showContacts = this.onShowContact(
+      this.state.List,
+      this.state.findContact
+    );
     return (
       <div className="container">
         <div className="row">
           <Router>
-            <Header />
+            <Header onSearch={this.onSearch} />
             <Switch>
               <Route
                 path="/"
                 exact
                 render={() => (
                   <ContactList
-                    List={this.state.List}
+                    List={showContacts}
                     onFavoriteChange={this.onFavoriteChange}
                     onDeleteContact={this.onDeleteContact}
+                    onEditContact={this.onEditContact}
                   />
                 )}
               />
@@ -135,14 +180,16 @@ class App extends React.Component {
                 exact
                 render={() => <AddContact onAddContact={this.onAddContact} />}
               />
-              <Route path="*" component={NotFound} />
               <Route
                 path="/editcontact"
-                exact
                 render={() => (
-                  <EditContact onEditContact={this.onEditContact} />
+                  <EditContact
+                    currentContact={this.state.currentContact}
+                    onEditCurrentContact={this.onEditCurrentContact}
+                  />
                 )}
               />
+              <Route path="*" component={NotFound} />
             </Switch>
           </Router>
         </div>

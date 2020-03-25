@@ -4,14 +4,19 @@ import "./ContactList.css";
 
 import ContactItem from "./ContactItem/ContactItem";
 
-const ContactList = ({ List, onFavoriteChange, onDeleteContact }) => {
+const ContactList = ({
+  List,
+  onFavoriteChange,
+  onDeleteContact,
+  onEditContact
+}) => {
   /*   console.log("Props in ContactList: ", List); */
   const singleContact = List.map(item => {
     return (
       <ContactItem
         key={item.id}
         name={item.name}
-        adress={item.adress}
+        address={item.address}
         phone={item.phone}
         email={item.email}
         gender={item.gender}
@@ -19,6 +24,7 @@ const ContactList = ({ List, onFavoriteChange, onDeleteContact }) => {
         isFavorite={item.isFavorite}
         onFavoriteChange={() => onFavoriteChange(item.id)}
         onDeleteContact={() => onDeleteContact(item.id)}
+        onEditContact={() => onEditContact(item.id)}
       />
     );
   });

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 class ContactItem extends Component {
   state = {
     name: this.props.name,
-    adress: this.props.adress,
+    address: this.props.address,
     phone: this.props.phone,
     email: this.props.email,
     gender: this.props.gender,
@@ -29,7 +29,7 @@ class ContactItem extends Component {
   render() {
     const {
       name,
-      adress,
+      address,
       phone,
       email,
       gender,
@@ -61,18 +61,18 @@ class ContactItem extends Component {
                   aria-hidden="true"
                   onClick={this.props.onFavoriteChange}
                 ></i>
+                <Link to={"/editcontact"}>
+                  <i
+                    className="fa fa-pencil-square-o fa-2x edit"
+                    aria-hidden="true"
+                    onClick={this.props.onEditContact}
+                  ></i>
+                </Link>
                 <i
                   className="fa fa-trash-o fa-2x trash"
                   aria-hidden="true"
                   onClick={this.props.onDeleteContact}
                 ></i>
-                <Link to="/editcontact">
-                  <i
-                    class="fa fa-pencil-square-o fa-2x"
-                    aria-hidden="true"
-                    onClick={this.props.onEditContact}
-                  ></i>
-                </Link>
               </span>
             </span>
 
@@ -80,10 +80,10 @@ class ContactItem extends Component {
             <span
               className="glyphicon glyphicon-map-marker text-muted c-info"
               data-toggle="tooltip"
-              title={adress}
+              title={address}
             ></span>
             <span>
-              <span className="text-muted">{adress}</span>
+              <span className="text-muted">{address}</span>
               <br />
             </span>
             <span

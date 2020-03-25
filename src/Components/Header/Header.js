@@ -2,14 +2,17 @@ import React from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+// Components
+import Search from "../Search/Search";
+
+const Header = ({ onSearch }) => {
   return (
     <nav className="navbar navbar-default">
       <div className="container-fluid">
         <div className="navbar-header">
           <button
             type="button"
-            class="navbar-toggle collapsed"
+            className="navbar-toggle collapsed"
             data-toggle="collapse"
             data-target="#bs-example-navbar-collapse-1"
             aria-expanded="false"
@@ -69,18 +72,7 @@ const Header = () => {
               </ul>
             </li>
           </ul>
-          <form className="navbar-form navbar-right">
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search"
-              />
-            </div>
-            <button type="submit" className="btn btn-default">
-              Submit
-            </button>
-          </form>
+          <Search onSearch={onSearch} />
         </div>
       </div>
     </nav>
