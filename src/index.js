@@ -12,41 +12,41 @@ import NotFound from "./Components/NotFound/NotFound";
 import EditContact from "./Components/EditContact/EditContact";
 
 class App extends React.Component {
-  URL = "https://event-7c503.firebaseio.com/list.json";
+  URL = "https://my-db-f6af5.firebaseio.com/list.json"; // URL to firebase
 
   state = {
     List: [],
     currentContact: "",
     findContact: "",
-    currency: ""
+    currency: "",
   };
 
   updateContactList = () => {
     fetch(this.URL, {
-      method: "GET"
+      method: "GET",
     })
-      .then(response => {
+      .then((response) => {
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         this.setState({
-          List: data
+          List: data,
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   componentDidMount() {
     this.updateContactList();
   }
 
-  onFavoriteChange = id => {
-    const index = this.state.List.findIndex(elem => elem.id === id);
+  onFavoriteChange = (id) => {
+    const index = this.state.List.findIndex((elem) => elem.id === id);
     let tempList = this.state.List.slice();
     tempList[index].isFavorite = !tempList[index].isFavorite;
-    this.setState(state => {
+    this.setState((state) => {
       return {
-        isFavorite: !this.tempList
+        isFavorite: !this.tempList,
       };
     });
   };
@@ -56,14 +56,14 @@ class App extends React.Component {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(newList)
+      body: JSON.stringify(newList),
     })
-      .then(function(res) {
+      .then(function (res) {
         console.log(res);
       })
-      .catch(function(res) {
+      .catch(function (res) {
         console.log(res);
       });
     this.updateContactList();
@@ -81,17 +81,17 @@ class App extends React.Component {
       email: email,
       gender: gender,
       avatar: avatar,
-      isFavorite: isFavorite
+      isFavorite: isFavorite,
     };
     const newList = [...this.state.List, newContact];
     this.saveNewContact(newList);
   };
 
-  onEditContact = id => {
-    const index = this.state.List.findIndex(elem => elem.id === id);
+  onEditContact = (id) => {
+    const index = this.state.List.findIndex((elem) => elem.id === id);
     const currentContact = this.state.List[index];
     this.setState({
-      currentContact: currentContact
+      currentContact: currentContact,
     });
   };
 
@@ -113,30 +113,30 @@ class App extends React.Component {
       email: email,
       gender: gender,
       avatar: avatar,
-      isFavorite: isFavorite
+      isFavorite: isFavorite,
     };
-    const index = this.state.List.findIndex(elem => elem.id === id);
+    const index = this.state.List.findIndex((elem) => elem.id === id);
     const partOne = this.state.List.slice(0, index);
     const partTwo = this.state.List.slice(index + 1);
     const newList = [...partOne, editedContact, ...partTwo];
     this.setState({
-      List: newList
+      List: newList,
     });
     this.saveNewContact(newList);
   };
 
-  onDeleteContact = id => {
-    const index = this.state.List.findIndex(elem => elem.id === id);
+  onDeleteContact = (id) => {
+    const index = this.state.List.findIndex((elem) => elem.id === id);
     const partOne = this.state.List.slice(0, index);
     const partTwo = this.state.List.slice(index + 1);
     const newList = [...partOne, ...partTwo];
     this.saveNewContact(newList);
   };
 
-  onSearch = contactName => {
+  onSearch = (contactName) => {
     /*    console.log("Contact Name =>", contactName); */
     this.setState({
-      findContact: contactName
+      findContact: contactName,
     });
   };
 
@@ -145,7 +145,7 @@ class App extends React.Component {
     if (searchValue.length === 0) {
       return items;
     }
-    return items.filter(item => {
+    return items.filter((item) => {
       // console.log("item => ", item.name);
 
       return item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
