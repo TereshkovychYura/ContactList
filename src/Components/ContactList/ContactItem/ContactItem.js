@@ -10,14 +10,14 @@ class ContactItem extends Component {
     email: this.props.email,
     gender: this.props.gender,
     avatar: this.props.avatar,
-    isFavorite: this.props.isFavorite
+    isFavorite: this.props.isFavorite,
   };
 
   onRandomAvatar = () => {
     const randomAvatar = Math.floor(Math.random() * Math.floor(99));
     console.log(randomAvatar);
     this.setState({
-      avatar: randomAvatar
+      avatar: randomAvatar,
     });
   };
 
@@ -34,7 +34,7 @@ class ContactItem extends Component {
       email,
       gender,
       avatar,
-      isFavorite
+      isFavorite,
     } = this.state;
     const URL = `http://api.randomuser.me/portraits/${gender}/${avatar}.jpg`;
 
@@ -107,7 +107,7 @@ class ContactItem extends Component {
           </div>
           <div className="clearfix"></div>
           <button
-            className="btn btn-success btn-random"
+            className="btn btn-warning btn-random"
             onClick={this.onRandomAvatar}
           >
             Random avatar
