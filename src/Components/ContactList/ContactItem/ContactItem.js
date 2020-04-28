@@ -107,7 +107,7 @@ class ContactItem extends Component {
           </div>
           <div className="clearfix"></div>
           <button
-            className="btn btn-warning btn-random"
+            className="btn btn-danger btn-random"
             onClick={this.onRandomAvatar}
           >
             Random avatar
