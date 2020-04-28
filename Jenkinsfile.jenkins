@@ -41,7 +41,7 @@ pipeline  {
             steps {
                 echo " ============== stoping all images =================="
                 sh '''
-                docker stop chatterbox
+                docker stop contact_list
                 '''
             }
         } 
@@ -49,15 +49,15 @@ pipeline  {
             steps {
                 echo " ============== removing all docker containers =================="
                 sh '''
-                docker rm chatterbox
+                docker rm contact_list
                 '''
             }
         }
         stage("docker run") {
             steps {
-                echo " ============== starting chatterbox =================="
+                echo " ============== starting v =================="
                 sh '''
-                docker run -d --restart=always --name chatterbox -p 3000:3000 macnaer/chatterbox
+                docker run -d --restart=always --name contact_list -p 80:3000 frez70/react-contactlist
                 '''
             }
         }
